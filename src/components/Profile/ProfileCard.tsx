@@ -1,11 +1,22 @@
 import { Mail } from "lucide-react";
 import UserModel from "../../models/user_model";
+import { useState } from "react";
+import EditProfileModal from "../../views/edit_profile_modal";
 
 interface ProfileCardProps {
   user: UserModel;
 }
 
 const ProfileCard = ({ user }: ProfileCardProps) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center gap-4">
       
@@ -26,9 +37,10 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
         {user.email}
       </div>
 
-      <button className="mt-2 w-full bg-emerald-500 text-white py-2 rounded-lg hover:bg-emerald-600 transition">
+      <button className="mt-2 w-full bg-emerald-500 text-white py-2 rounded-lg hover:bg-emerald-600 transition" onClick={handleOpen}>
         Editar Perfil
       </button>
+      <EditProfileModal open={open} handleClose={handleClose} user={user} />
     </div>
   );
 };

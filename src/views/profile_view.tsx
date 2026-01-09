@@ -1,43 +1,31 @@
-import { NavBar } from "../components/NavBar/NavBar";
+import { NavBar } from "../components/NavBar";
 import ProfileCard from "../components/Profile/ProfileCard";
 import ProfileStats from "../components/Profile/ProfileStats";
 import ProfileSection from "../components/Profile/ProfileSection";
-import ProfileActions from "../components/Profile/ProfileActions";
 import { getCurrentUser } from "../hooks/current_user_hook";
-import medceilogo from "../assets/medcei_logo_h_verde.png";
+import { LogOut } from "lucide-react";
+import { useState } from "react";
 
 const ProfileView = () => {
-    //   const user = getCurrentUser();
+  const user = getCurrentUser() ?? {
+    firstName: "Diogo",
+    lastName: "Silva",
+    email: "diogo@medcei.com",
+  };
 
-    //   if (!user) {
-    //     return <div className="p-6">Utilizador não autenticado</div>;
-    //   }
-
-  const user =
-    getCurrentUser() ?? {
-      firstName: "Diogo",
-      lastName: "Silva",
-      email: "diogo@medcei.com",
-    };
+  const handleLogout = () => {
+    // Lógica de logout aqui
+    console.log("Logout efetuado");
+  };
 
   return (
     <div className="min-h-screen bg-[#EAF4F1]">
       <NavBar />
 
       <div className="max-w-[1600px] mx-auto px-10 py-10">
-
-        {/* Logo */}
-        <img
-            src={medceilogo}
-            alt="MEDCEI"
-            className="h-10 mb-6"
-        />
-
         {/* Card principal */}
         <div className="bg-white rounded-3xl shadow-xl p-10">
-
           <div className="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-10">
-
             {/* Coluna esquerda */}
             <div className="flex flex-col gap-8">
               <ProfileCard user={user} />
@@ -48,12 +36,13 @@ const ProfileView = () => {
 
             {/* Coluna direita */}
             <div className="flex flex-col gap-8">
-
               <ProfileSection title="Informações de Conta">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
                   <div>
                     <p className="text-xs text-gray-400">Nome Completo</p>
-                    <p className="font-medium">{user.firstName} {user.lastName}</p>
+                    <p className="font-medium">
+                      {user.firstName} {user.lastName}
+                    </p>
                   </div>
 
                   <div>
@@ -87,9 +76,14 @@ const ProfileView = () => {
                 </div>
               </ProfileSection>
 
-              <ProfileActions />
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-6 py-3 border border-red-500 text-red-500 rounded-xl hover:bg-red-50 transition width-fit mt-4 max-w-xs"
+              >
+                <LogOut size={18} />
+                Terminar Sessão
+              </button>
             </div>
-
           </div>
         </div>
       </div>
