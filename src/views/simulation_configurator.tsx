@@ -2,6 +2,7 @@ import { Activity, Clock, Play, Save, Users } from "lucide-react";
 import SimulationParameters from "../models/simulation";
 import { useState } from "react";
 import medcei_logo_simples from "../assets/medcei_logo_simples_verde.png";
+import BackgroundDecoration from "../utils/background_deco";
 
 const SimulationConfigurator = () => {
   const [params, setParams] = useState<SimulationParameters>(
@@ -44,8 +45,7 @@ const SimulationConfigurator = () => {
   return (
     <div className="relative min-h-screen p-8 font-sans text-gray-700 bg-[#F0F8F8] overflow-hidden">
       {/* Decoração de Fundo */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 md:w-[500px] md:h-[500px] bg-teal-100/60 rounded-full pointer-events-none z-0" />
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 md:w-[400px] md:h-[400px] bg-amber-100/60 rounded-full pointer-events-none z-0" />
+      <BackgroundDecoration />
 
       <div className="relative z-10">
       {/* Header */}

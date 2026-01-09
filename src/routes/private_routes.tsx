@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { getUser } from "../hooks/user_hook";
+import { getUserRole } from "../hooks/user_hook";
 
 const roles = ['admin', 'user']
 
@@ -16,9 +16,9 @@ const PrivateRoute = (props: PrivateRouteProps) => {
     let location = useLocation();
     const {isAuthenticated, children, allowedRoles} = props;
 
-    const userRole = getUser();
+    const userRole = getUserRole();
 
-    const hasAccess = isAuthenticated && allowedRoles.includes(userRole);
+    const hasAccess = isAuthenticated && allowedRoles.includes(userRole!) && hasRole(userRole!);
 
     if (!hasAccess) {
         return <Navigate to={"/"} state={{from:location}} replace />
