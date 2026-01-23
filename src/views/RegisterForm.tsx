@@ -5,8 +5,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 import { ArrowBack } from "@mui/icons-material";
-import { Register } from "../apis/auth";
-import User from '../models/user_model';
+import { authService } from "../apis/auth";
+import User from '../models/UserModel';
 
 
 interface RegisterFormProps {
@@ -30,7 +30,7 @@ const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
     setLoading(true);
     try {
         const newUser = { firstName, lastName, email, password };
-        await Register(newUser);
+        await authService.register(newUser);
         toast.success("Conta criada com sucesso!");
         
         setTimeout(() => onSwitchToLogin(), 2000); 
