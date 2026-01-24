@@ -1,8 +1,5 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import LoginView from './views/login_form';
-import { MainRoute } from './routes/routes';
+import { MainRoute } from './routes/Routes';
 
 function App() {
   return (

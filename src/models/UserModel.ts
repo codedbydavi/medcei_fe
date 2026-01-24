@@ -5,6 +5,9 @@ export default class User {
         public lastName: string,
         public email: string,
         public password?: string,
-        public role?: string
+        public role?: string,
+        public status?: string,
+        public fullName?: string
     ) {}
 }
+

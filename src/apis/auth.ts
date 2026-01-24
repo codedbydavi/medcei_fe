@@ -1,19 +1,17 @@
-import axios from "axios";
 import {
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   sendEmailVerification,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import User from "../models/user_model";
+import User from "../models/UserModel";
+import api from "./api";
 
 const provider = new GoogleAuthProvider();
-
-const api = axios.create({
-  baseURL: "http://127.0.0.1:5000",
-});
 
 type loginPayload = Pick<User, "email" | "password">;
 type registerPayload = Pick<
@@ -21,74 +19,114 @@ type registerPayload = Pick<
   "firstName" | "lastName" | "email" | "password"
 >;
 
-export const Login = async (user: loginPayload) => {
-  try {
-    const firebase = await signInWithEmailAndPassword(
-      auth,
-      user.email,
-      user.password!
-    );
+export const authService = {
+  // POST /auth/login - Login do utilizador
+  login: async (user: loginPayload) => {
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      const firebase = await signInWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password!,
+      );
 
-    if (!firebase.user.emailVerified) {
-      await auth.signOut();
-      throw new Error("Por favor, verifique seu e-mail antes de fazer login.");
+      if (!firebase.user.emailVerified) {
+        await auth.signOut();
+        throw new Error("EMAIL_NOT_VERIFIED");
+      }
+
+      const idToken = await firebase.user.getIdToken();
+      const response = await api.post(
+        "/auth/login",
+        {},
+        {
+          headers: { Authorization: `Bearer ${idToken}` },
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 403) {
+          await auth.signOut();
+          throw new Error(
+            error.response.data.error || "Acesso proibido: conta inativa.",
+          );
+        }
+      }
+      if (error.code === "auth/invalid-credential") {
+        throw new Error("Email ou palavra-passe incorretos.");
+      }
+
+      throw new Error(error.message || "Ocorreu um erro inesperado.");
     }
+  },
 
-    const idToken = await firebase.user.getIdToken();
-    const response = await api.post(
-      "/auth/login",
-      {},
-      {
-        headers: { Authorization: `Bearer ${idToken}` },
-        withCredentials: true,
-      }
-    );
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("role", response.data["role"]);
+  // POST /auth/login/google - Login com Google
+  loginWithGoogle: async () => {
+    try {
+      const firebase = await signInWithPopup(auth, provider);
+      const idToken = await firebase.user.getIdToken();
+      const response = await api.post(
+        "/login",
+        {},
+        {
+          headers: { Authorization: `Bearer ${idToken}` },
+        },
+      );
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("role", response.data.user.role);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // POST /auth/register - Registo do utilizador
+  register: async (user: registerPayload) => {
+    try {
+      const firebase = await createUserWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password!,
+      );
+      const idToken = await firebase.user.getIdToken();
+
+      await sendEmailVerification(firebase.user);
+      const response = await api.post(
+        "/auth/register",
+        { first_name: user.firstName, last_name: user.lastName },
+        {
+          headers: { Authorization: `Bearer ${idToken}` },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // POST /auth/refresh_token - Refresh token
+  refreshToken: async () => {
+    const response = await api.post("/auth/refresh", {});
     return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+  },
 
-export const LoginWithGoogle = async () => {
-  try {
-    const firebase = await signInWithPopup(auth, provider);
-    const idToken = await firebase.user.getIdToken();
-    const response = await api.post(
-      "/login",
-      {},
-      {
-        headers: { Authorization: `Bearer ${idToken}` },
-        withCredentials: true,
-      }
-    );
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("role", response.data["role"]);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+  // POST /auth/logout - Saida do Utilizador
+  logout: async () => {
+    try {
+      await auth.signOut();
+      const response = await api.post("/auth/logout", {});
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      throw error;
+    }
+  },
 
-export const Register = async (user: registerPayload) => {
-  try {
-    const firebase = await createUserWithEmailAndPassword(auth, user.email, user.password!);
-    const idToken = await firebase.user.getIdToken();
-
+  sendVerificationAgain: async (email: string, password: string) => {
+    const firebase = await signInWithEmailAndPassword(auth, email, password);
     await sendEmailVerification(firebase.user);
-    const response = await api.post(
-      "/auth/register",
-      { first_name: user.firstName, last_name: user.lastName },
-      {
-        headers: { Authorization: `Bearer ${idToken}` },
-        withCredentials: true,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+    await auth.signOut();
+  },
 };
-
-export default api;
