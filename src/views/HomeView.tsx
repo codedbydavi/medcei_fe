@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { PATHS } from "../routes/Paths";
 import { useEffect, useState } from "react";
 import { SimulationData } from "../models/SimulationModel";
-import { formatRelativeTime } from "../utils/formatRelativeTime";
+import { formatRelativeTime } from "../utils/FormatRelativeTime";
 import { useAuth } from "../context/AuthContext";
 import { UserStats } from "../models/StatsModel";
 import { statsService } from "../apis/Stats";

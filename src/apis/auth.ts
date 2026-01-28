@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import User from "../models/UserModel";
-import api from "./api";
+import api from "./Api";
 
 const provider = new GoogleAuthProvider();
 

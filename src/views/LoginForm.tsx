@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { Mail, Lock } from "lucide-react";
 
 import { PATHS } from "../routes/Paths";
-import { authService } from "../apis/auth";
+import { authService } from "../apis/Auth";
 import ForgotPasswordDialog from "./ForgotPasswordDialog";
 import GoogleIcon from "../assets/icons/google.jpeg";
 import MicrosoftIcon from "../assets/icons/microsoft.jpeg";

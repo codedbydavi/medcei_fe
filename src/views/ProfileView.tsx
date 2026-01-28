@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { statsService } from "../apis/Stats";
 import { SimulationData } from "../models/SimulationModel";
-import { formatRelativeTime } from "../utils/formatRelativeTime";
+import { formatRelativeTime } from "../utils/FormatRelativeTime";
 import { PATHS } from "../routes/Paths";
 import { useNavigate } from "react-router-dom";
 import BackgroundDecoration from "../utils/BackgroundDeco";

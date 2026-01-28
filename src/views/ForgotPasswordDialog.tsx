@@ -1,5 +1,7 @@
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useState } from "react";
+import { auth } from "../firebaseConfig";
+import { toast } from "react-toastify";
 
 interface ForgotPasswordProps {
     open?: boolean;
@@ -11,14 +13,24 @@ const ForgotPasswordDialog = ({ open, onClose }: ForgotPasswordProps) => {
     
     const handleForgotPassword = async () => {
         try {
-            //await sendPasswordResetEmail(auth, email);
+            if (!validateEmail(email)) {
+                toast.warn("Por favor, insira um endereço de email válido.");
+                return;
+            }   
+            await sendPasswordResetEmail(auth, email);
             alert("Email de redefinição de password enviado!\n" + email);
             if (onClose) onClose();
         } catch (error) {
             console.error("Erro ao enviar email de redefinição de password:", error);
             alert("Erro ao enviar email de redefinição de password. Verifique o email introduzido.");
         }
-    }
+    };
+
+    const validateEmail = (email: string) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     return (
         open ? (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./Api";
 import User from "../models/UserModel";
 
 export const userService = {

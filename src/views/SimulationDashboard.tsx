@@ -15,7 +15,7 @@ import { StatCard } from "../components/StatCard";
 import SimulationParameters from "../models/SimulationModel";
 import { simulationService } from "../apis/Simulation";
 import { toast } from "react-toastify";
-import { getBatchSize } from "../utils/getBatchSize";
+import { getBatchSize } from "../utils/GetBatchSize";
 import BackgroundDecoration from "../utils/BackgroundDeco";
 import html2pdf from "html2pdf.js";
 

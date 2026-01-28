@@ -2,7 +2,7 @@ import { Mail } from "lucide-react";
 import UserModel from "../../models/UserModel";
 import { useState } from "react";
 import EditProfileModal from "./EditProfileModal";
-import { useRoleFormatter } from "../../utils/useRoleFormatter";
+import { useRoleFormatter } from "../../utils/UseRoleFormatter";
 
 
 interface ProfileCardProps {

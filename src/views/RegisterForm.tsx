@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 import { ArrowBack } from "@mui/icons-material";
-import { authService } from "../apis/auth";
+import { authService } from "../apis/Auth";
 import User from "../models/UserModel";
 
 interface RegisterFormProps {

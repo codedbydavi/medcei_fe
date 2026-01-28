@@ -1,5 +1,5 @@
 import SimulationParameters, { SimulationData, SimulationTimeSeries } from "../models/SimulationModel";
-import api from "./api";
+import api from "./Api";
 
 export const simulationService = {
   // POST /simulate/start - Inicia os parâmetros

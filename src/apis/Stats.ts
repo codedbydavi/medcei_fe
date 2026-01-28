@@ -1,6 +1,6 @@
 import { SimulationData } from "../models/SimulationModel";
 import { AdminSummary, ChartData, SystemLogEntry, UserStats } from "../models/StatsModel";
-import api from "./api";
+import api from "./Api";
 
 export const statsService = {
   // GET /stats/summary (Apenas Admin)

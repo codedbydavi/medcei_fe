@@ -15,9 +15,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Logout, Person } from "@mui/icons-material";
 import { Home } from "lucide-react";
 import MedceiLogo from "../assets/medcei_logo_simples_verde.png";
-import { PATHS } from "../routes/Paths";
 import { useAuth } from "../context/AuthContext";
-import { useRoleFormatter } from "../utils/useRoleFormatter";
+import { useRoleFormatter } from "../utils/UseRoleFormatter";
+import { PATHS } from "../routes/Paths";
 
 export const NavBar = () => {
   const navigate = useNavigate();
